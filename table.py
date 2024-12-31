@@ -1,6 +1,6 @@
 import csv
 from prettytable import PrettyTable
-csv_file = "cart.csv"
+csv_file = "food_order_log.csv"
 try:
     with open(csv_file, mode="r") as file:
         reader = csv.reader(file)
