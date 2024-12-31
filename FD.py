@@ -2,7 +2,7 @@ import csv
 import os
 from datetime import datetime
 
-# Step 2: Defining the Global Variables
+
 menu = {
     1: {"name": "Pizza", "price": 12.99},
     2: {"name": "Burger", "price": 8.99},
@@ -12,27 +12,27 @@ menu = {
 cart = {}
 log_file = "food_order_log.csv"
 
-# Step 1: Initialize the CSV file (only adds the header if it doesn't exist)
+
 if not os.path.exists(log_file):
     with open(log_file, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Timestamp", "Action", "Details"])
 
-# Utility function to log actions
+
 def log_action(action, details):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(log_file, mode="a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([timestamp, action, details])
 
-# Step 3: Displaying the Menu
+
 def display_menu():
     print("Menu:")
     for item_id, item_details in menu.items():
         print(f"{item_id}. {item_details['name']} - ${item_details['price']}")
     log_action("Display Menu", "Displayed the menu")
 
-# Step 4: Add Menu Items to the Cart
+
 def add_to_cart(item_id, quantity):
     if item_id in menu:
         if item_id in cart:
@@ -44,7 +44,7 @@ def add_to_cart(item_id, quantity):
     else:
         print("Invalid item ID.")
 
-# Step 5: Removing Items from the Cart
+
 def remove_from_cart(item_id):
     if item_id in cart:
         removed_item = cart[item_id]["name"]
@@ -54,7 +54,7 @@ def remove_from_cart(item_id):
     else:
         print("Item not found in the cart.")
 
-# Step 6: Modifying Item Quantities in the Cart
+
 def modify_cart(item_id, new_quantity):
     if item_id in cart:
         cart[item_id]["quantity"] = new_quantity
@@ -63,7 +63,7 @@ def modify_cart(item_id, new_quantity):
     else:
         print("Item not found in the cart.")
 
-# Step 7: Viewing Cart Contents
+
 def view_cart():
     if not cart:
         print("Your cart is empty.")
@@ -76,7 +76,7 @@ def view_cart():
             details.append(f"{item_details['name']} x {item_details['quantity']}")
         log_action("View Cart", "; ".join(details))
 
-# Step 8: Checking Out
+
 def checkout():
     if not cart:
         print("Cart is empty. Nothing to checkout.")
@@ -89,7 +89,7 @@ def checkout():
     cart.clear()
     print("Thank you for your order!")
 
-# Step 9 and Step 10: Prompting for User Input & Building the Ordering Loop
+
 def ordering_loop():
     while True:
         print("\nOptions:")
@@ -136,6 +136,5 @@ def ordering_loop():
         else:
             print("Invalid choice. Please try again.")
 
-# Step 11: Testing the Application
-if __name__ == "__main__":
-    ordering_loop()
+
+ordering_loop()

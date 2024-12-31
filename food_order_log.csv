@@ -8,3 +8,8 @@ Timestamp,Action,Details
 2024-12-30 22:18:18,View Cart,Salad x 5
 2024-12-30 22:18:20,Checkout,Total: $34.95
 2024-12-30 22:18:22,Exit,User exited the application
+2024-12-30 22:22:28,Display Menu,Displayed the menu
+2024-12-30 22:22:37,Add to Cart,Added 4 x Salad
+2024-12-30 22:22:41,View Cart,Salad x 4
+2024-12-30 22:22:42,Checkout,Total: $27.96
+2024-12-30 22:22:44,Exit,User exited the application
