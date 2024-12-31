@@ -1,142 +1,141 @@
 import csv
+import os
+from datetime import datetime
 
+# Step 2: Defining the Global Variables
 menu = {
-    "Pizza": 8.99,
-    "Burger": 5.49,
-    "Sushi": 12.99,
-    "Tacos": 6.99,
-    "Salad": 4.99,
-    "Sandwich": 5.99,
-    "Pasta": 9.49,
-    "Fried Chicken": 7.99,
-    "Ice Cream": 3.49,
-    "Smoothie": 4.99
+    1: {"name": "Pizza", "price": 12.99},
+    2: {"name": "Burger", "price": 8.99},
+    3: {"name": "Pasta", "price": 10.99},
+    4: {"name": "Salad", "price": 6.99}
 }
+cart = {}
+log_file = "food_order_log.csv"
 
-csv_file = "cart.csv"
-
-def initialize_csv():
-    try:
-        with open(csv_file, mode="x", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["item", "quantity"])
-    except FileExistsError:
-        pass
-
-def add_to_csv(item, quantity):
-    cart = read_cart_from_csv()
-    if item in cart:
-        cart[item] += quantity
-    else:
-        cart[item] = quantity
-    write_cart_to_csv(cart)
-
-def remove_from_csv(item):
-    cart = read_cart_from_csv()
-    if item in cart:
-        del cart[item]
-    write_cart_to_csv(cart)
-
-def modify_quantity_in_csv(item, quantity):
-    cart = read_cart_from_csv()
-    if item in cart:
-        cart[item] = quantity
-    write_cart_to_csv(cart)
-
-def read_cart_from_csv():
-    cart = {}
-    try:
-        with open(csv_file, mode="r", newline="") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                cart[row["item"]] = int(row["quantity"])
-    except FileNotFoundError:
-        pass
-    return cart
-
-def write_cart_to_csv(cart):
-    with open(csv_file, mode="w", newline="") as file:
+# Step 1: Initialize the CSV file (only adds the header if it doesn't exist)
+if not os.path.exists(log_file):
+    with open(log_file, mode="w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["item", "quantity"])
-        for item, quantity in cart.items():
-            writer.writerow([item, quantity])
+        writer.writerow(["Timestamp", "Action", "Details"])
 
+# Utility function to log actions
+def log_action(action, details):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_file, mode="a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([timestamp, action, details])
+
+# Step 3: Displaying the Menu
 def display_menu():
-    print("\nMenu:")
-    for item, price in menu.items():
-        print(f"{item}: ${price:.2f}")
+    print("Menu:")
+    for item_id, item_details in menu.items():
+        print(f"{item_id}. {item_details['name']} - ${item_details['price']}")
+    log_action("Display Menu", "Displayed the menu")
 
-def add_to_cart(item, quantity):
-    if item in menu:
-        add_to_csv(item, quantity)
-        print(f"{item} added to the cart.")
+# Step 4: Add Menu Items to the Cart
+def add_to_cart(item_id, quantity):
+    if item_id in menu:
+        if item_id in cart:
+            cart[item_id]["quantity"] += quantity
+        else:
+            cart[item_id] = {"name": menu[item_id]["name"], "price": menu[item_id]["price"], "quantity": quantity}
+        print(f"Added {quantity} x {menu[item_id]['name']} to the cart.")
+        log_action("Add to Cart", f"Added {quantity} x {menu[item_id]['name']}")
     else:
-        print(f"{item} is not available.")
+        print("Invalid item ID.")
 
-def remove_from_cart(item):
-    cart = read_cart_from_csv()
-    if item in cart:
-        remove_from_csv(item)
-        print(f"{item} removed from the cart.")
+# Step 5: Removing Items from the Cart
+def remove_from_cart(item_id):
+    if item_id in cart:
+        removed_item = cart[item_id]["name"]
+        del cart[item_id]
+        print(f"Removed item {removed_item} from the cart.")
+        log_action("Remove from Cart", f"Removed {removed_item}")
     else:
-        print(f"{item} is not in the cart.")
+        print("Item not found in the cart.")
 
-def modify_quantity(item, quantity):
-    cart = read_cart_from_csv()
-    if item in cart:
-        modify_quantity_in_csv(item, quantity)
-        print(f"{item} quantity updated to {quantity}.")
+# Step 6: Modifying Item Quantities in the Cart
+def modify_cart(item_id, new_quantity):
+    if item_id in cart:
+        cart[item_id]["quantity"] = new_quantity
+        print(f"Updated {cart[item_id]['name']} quantity to {new_quantity}.")
+        log_action("Modify Cart", f"Updated {cart[item_id]['name']} to quantity {new_quantity}")
     else:
-        print(f"{item} is not in the cart.")
+        print("Item not found in the cart.")
 
+# Step 7: Viewing Cart Contents
 def view_cart():
-    print("\nCart Contents:")
-    cart = read_cart_from_csv()
-    if cart:
-        for item, quantity in cart.items():
-            print(f"{item}: {quantity} @ ${menu[item]:.2f} each")
-    else:
+    if not cart:
         print("Your cart is empty.")
-
-def checkout():
-    cart = read_cart_from_csv()
-    if cart:
-        total = sum(menu[item] * quantity for item, quantity in cart.items())
-        print(f"\nTotal: ${total:.2f}")
-        print("Thank you for your order!")
-        write_cart_to_csv({})  # Clear the cart
+        log_action("View Cart", "Cart is empty")
     else:
-        print("Your cart is empty. Nothing to checkout.")
+        print("Cart:")
+        details = []
+        for item_id, item_details in cart.items():
+            print(f"{item_details['name']} - ${item_details['price']} x {item_details['quantity']}")
+            details.append(f"{item_details['name']} x {item_details['quantity']}")
+        log_action("View Cart", "; ".join(details))
 
-def main():
-    initialize_csv()
+# Step 8: Checking Out
+def checkout():
+    if not cart:
+        print("Cart is empty. Nothing to checkout.")
+        log_action("Checkout", "Attempted checkout with an empty cart")
+        return
+
+    total = sum(item["price"] * item["quantity"] for item in cart.values())
+    print(f"Your total is: ${total:.2f}")
+    log_action("Checkout", f"Total: ${total:.2f}")
+    cart.clear()
+    print("Thank you for your order!")
+
+# Step 9 and Step 10: Prompting for User Input & Building the Ordering Loop
+def ordering_loop():
     while True:
-        print("\nOptions: 1. View Menu  2. Add to Cart  3. Remove from Cart  4. Modify Quantity")
-        print("         5. View Cart  6. Checkout  7. Exit")
+        print("\nOptions:")
+        print("1. View Menu")
+        print("2. Add to Cart")
+        print("3. Remove from Cart")
+        print("4. Modify Cart")
+        print("5. View Cart")
+        print("6. Checkout")
+        print("7. Exit")
+        
         choice = input("Enter your choice: ")
-
+        
         if choice == "1":
             display_menu()
         elif choice == "2":
-            item = input("Enter item to add: ").title()
-            quantity = int(input("Enter quantity: "))
-            add_to_cart(item, quantity)
+            try:
+                item_id = int(input("Enter the item ID to add: "))
+                quantity = int(input("Enter the quantity: "))
+                add_to_cart(item_id, quantity)
+            except ValueError:
+                print("Invalid input. Please enter numbers only.")
         elif choice == "3":
-            item = input("Enter item to remove: ").title()
-            remove_from_cart(item)
+            try:
+                item_id = int(input("Enter the item ID to remove: "))
+                remove_from_cart(item_id)
+            except ValueError:
+                print("Invalid input. Please enter numbers only.")
         elif choice == "4":
-            item = input("Enter item to modify: ").title()
-            quantity = int(input("Enter new quantity: "))
-            modify_quantity(item, quantity)
+            try:
+                item_id = int(input("Enter the item ID to modify: "))
+                new_quantity = int(input("Enter the new quantity: "))
+                modify_cart(item_id, new_quantity)
+            except ValueError:
+                print("Invalid input. Please enter numbers only.")
         elif choice == "5":
             view_cart()
         elif choice == "6":
             checkout()
         elif choice == "7":
-            print("Exiting. Goodbye!")
+            print("Goodbye!")
+            log_action("Exit", "User exited the application")
             break
         else:
             print("Invalid choice. Please try again.")
 
+# Step 11: Testing the Application
 if __name__ == "__main__":
-    main()
+    ordering_loop()
