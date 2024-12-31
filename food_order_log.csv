@@ -13,3 +13,11 @@ Timestamp,Action,Details
 2024-12-30 22:22:41,View Cart,Salad x 4
 2024-12-30 22:22:42,Checkout,Total: $27.96
 2024-12-30 22:22:44,Exit,User exited the application
+2024-12-31 00:59:10,Display Menu,Displayed the menu
+2024-12-31 00:59:21,Add to Cart,Added 5 x Salad
+2024-12-31 00:59:26,Add to Cart,Added 6 x Steak
+2024-12-31 00:59:31,Add to Cart,Added 3 x Sandwich
+2024-12-31 00:59:37,Add to Cart,Added 7 x Pizza
+2024-12-31 00:59:42,Checkout,Total: $287.79
+2024-12-31 01:00:16,View Cart,Cart is empty
+2024-12-31 01:00:48,Exit,User exited the application

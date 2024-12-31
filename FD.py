@@ -7,7 +7,18 @@ menu = {
     1: {"name": "Pizza", "price": 12.99},
     2: {"name": "Burger", "price": 8.99},
     3: {"name": "Pasta", "price": 10.99},
-    4: {"name": "Salad", "price": 6.99}
+    4: {"name": "Salad", "price": 6.99},
+    5: {"name": "Sushi", "price": 15.99},
+    6: {"name": "Tacos", "price": 9.49},
+    7: {"name": "Steak", "price": 22.99},
+    8: {"name": "Ramen", "price": 13.49},
+    9: {"name": "Sandwich", "price": 7.99},
+    10: {"name": "Fries", "price": 4.99},
+    11: {"name": "Nachos", "price": 11.49},
+    12: {"name": "Hot Dog", "price": 5.99},
+    13: {"name": "Curry", "price": 14.49},
+    14: {"name": "Wings", "price": 12.49}
+
 }
 cart = {}
 log_file = "food_order_log.csv"
