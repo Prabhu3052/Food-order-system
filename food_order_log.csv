@@ -21,3 +21,12 @@ Timestamp,Action,Details
 2024-12-31 00:59:42,Checkout,Total: $287.79
 2024-12-31 01:00:16,View Cart,Cart is empty
 2024-12-31 01:00:48,Exit,User exited the application
+2025-01-18 05:21:14,Display Menu,Displayed the menu
+2025-01-18 05:21:22,Add to Cart,Added 50 x Salad
+2025-01-18 05:21:54,Add to Cart,Added 34 x Tacos
+2025-01-18 05:22:04,Add to Cart,Added 45 x Ramen
+2025-01-18 05:22:18,Modify Cart,Updated Tacos to quantity 20
+2025-01-18 05:22:35,Remove from Cart,Removed Salad
+2025-01-18 05:22:44,View Cart,Tacos x 20; Ramen x 45
+2025-01-18 05:22:59,Checkout,Total: $796.85
+2025-01-18 05:23:08,Exit,User exited the application
